@@ -4,18 +4,21 @@
 var ansi = require('ansi'), cursor = ansi(process.stdout)
 
 // Config file
-var config = require("./config")
+const config = require("./config/development/server")
 
 // Express server
 var express = require('express')
 var app = express()
 
+// Store ansi/cursor in app
+app.cursor = cursor
+
 // Bring in app middleware & routes
-require('./middleware/app')(app)
-require('./routes')(app)
+require('./middleware/app')(app, config)
+require('./routes')(app, config)
 
 // Start app
-var port = config.http.port
+const port = config.http.port
 var server = app.listen(port, function() {
 	cursor.hex('#2EAEBB').write("Waiting for web requests on ")
 				.hex('#D35003').write('' + port + '\r\n')
