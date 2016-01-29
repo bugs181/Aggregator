@@ -19,6 +19,6 @@ A good description can be found there, along with it's capabilities and features
  * ![](http://www.youtube.com/favicon.ico) YouTube
 
 **RSS channels:**
- * ![](http://www.hackaday.io/favicon.ico) Hackaday.io (coming soon)
+ * <img src="http://www.hackaday.io/favicon.ico" width="16" /> Hackaday.io (coming soon)
 
 **And hundreds more coming soon.**
