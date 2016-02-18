@@ -7,8 +7,10 @@ var mediaParser = require("./mediaParser")
 
 module.exports = {
 	name: "PrimeWire",
-	website: website,
 	type: "television",
+	website: website,
+
+	channelType: "aggregator",
 	
 	browse: browseRequest,
 	search: search,
