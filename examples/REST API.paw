@@ -189,7 +189,7 @@
     </object>
     <object type="LMREQUEST" id="z119">
         <attribute name="uuid" type="string">214D37DA-2B87-4697-8D53-2B3A54A740BF</attribute>
-        <attribute name="url" type="string">["http:\\/\\/",{"data":{"environmentVariable":"D49754B1-A766-4B8A-8FBD-F217E8D5058F"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},":",{"data":{"environmentVariable":"F0AB0F59-AD01-49FC-BFE0-9D6699030C36"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/",{"data":{"environmentVariable":"5C7F3604-420A-4DDA-877E-675AC65F661A"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/channels\\/television"]</attribute>
+        <attribute name="url" type="string">["http:\\/\\/",{"data":{"environmentVariable":"D49754B1-A766-4B8A-8FBD-F217E8D5058F"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},":",{"data":{"environmentVariable":"F0AB0F59-AD01-49FC-BFE0-9D6699030C36"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/",{"data":{"environmentVariable":"5C7F3604-420A-4DDA-877E-675AC65F661A"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/channels\\/RSS"]</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>

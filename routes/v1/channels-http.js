@@ -31,13 +31,13 @@ module.exports = function(app, cfg, chnls) {
 
 
 function listChannels(req, res) {
-	var listChannelType = ((req.params.channelType) ? req.params.channelType : null)
+	var listChannelType = ((req.params.channelType) ? req.params.channelType.toLowerCase() : null)
 	var channelsArray = Object.keys(channels).map(function(key) { return channels[key] })
 
 	var channelList = []
 	for (var channelRaw of channelsArray) {
 		if (!channelRaw.name)  continue
-		if (listChannelType && listChannelType != channelRaw.type)  continue
+		if (listChannelType && channelRaw.type && listChannelType != channelRaw.type.toLowerCase())  continue
 
 		var channel = {
 			name: channelRaw.name,
