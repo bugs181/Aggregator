@@ -25,8 +25,8 @@ function loadChannels() {
 		} catch (err) {
 
 			cursor
-			.hex('#FF0000').write("Warning: Could not load module: " + channelModule + "\r\n")
-			.hex('#D35003').write(err + "\r\n") // #FFA500 #FF8C00
+			.hex('#D35003').write("Warning: Could not load module: " + channelModule + "\r\n")
+			.hex('#FF0000').write(err + "\r\n") // #FFA500 #FF8C00
 
 		}
 	}

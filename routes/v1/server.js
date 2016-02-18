@@ -15,8 +15,10 @@ function serverInfo(req, res) {
 		status: 'online', 
 		uptime: process.uptime() | 0, 
 
+		// todo: Add commit info
+
 		// Added a few more bits of info
-		version: "08112015", // Month/Day/Year
-		service: "Media4All"
+		version: "02182016", // Month/Day/Year
+		service: "MediaChannel"
 	});
 }

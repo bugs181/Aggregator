@@ -10,6 +10,7 @@ module.exports = function(app, cfg, chnls) {
 
 	// List supported channels
 	app.get('/channels', listChannels)
+	app.get('/channels/:channelType', listChannels)
 
 	// Allow discovering of new channels
 	app.get('/discover/:channels/', discoverChannels)
@@ -30,11 +31,13 @@ module.exports = function(app, cfg, chnls) {
 
 
 function listChannels(req, res) {
+	var listChannelType = ((req.params.channelType) ? req.params.channelType : null)
 	var channelsArray = Object.keys(channels).map(function(key) { return channels[key] })
 
 	var channelList = []
 	for (var channelRaw of channelsArray) {
 		if (!channelRaw.name)  continue
+		if (listChannelType && listChannelType != channelRaw.type)  continue
 
 		var channel = {
 			name: channelRaw.name,
@@ -62,6 +65,10 @@ function discoverMediaObjects(req, res) {
 	 * http://media.object/discover/primewire.ag/movies?tag=comedy
 	 * http://media.object/discover/primewire.ag/tag/comedy
 	*/
+}
 
+function getMediaObjectInfo(req, res) {
+}
 
+function searchMediaObjects(req, res) {
 }
