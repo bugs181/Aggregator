@@ -8,6 +8,7 @@ var channelModules = [ // const channelModules ?
 
 	/* RSS channels */
 	"RSS/hackaday.io",
+	"RSS/changelog"
 ]
 
 var cursor
