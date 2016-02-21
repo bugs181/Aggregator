@@ -20,6 +20,6 @@ A good description can be found there, along with it's capabilities and features
 
 **RSS channels:**
  * <img src="http://www.hackaday.io/favicon.ico" width="16" /> Hackaday.io (coming soon)
- * <img src="https://changelog.com/wp-content/themes/thechangelog-theme/favicon.ico" /> the changelog
+ * <img src="https://changelog.com/wp-content/themes/thechangelog-theme/favicon.ico" width="16 /> the changelog
 
 **And hundreds more coming soon.**
