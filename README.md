@@ -19,7 +19,7 @@ A good description can be found there, along with it's capabilities and features
  * ![](http://www.youtube.com/favicon.ico) YouTube
 
 **RSS channels:**
- * <img src="http://www.hackaday.io/favicon.ico" width="16" /> Hackaday.io (coming soon)
- * <img src="https://changelog.com/wp-content/themes/thechangelog-theme/favicon.ico" width="16" /> the changelog
+ * ![](<img src="http://www.hackaday.io/favicon.ico" width="16" />) Hackaday.io (coming soon)
+ * ![](<img src="https://changelog.com/wp-content/themes/thechangelog-theme/favicon.ico" width="16" />) [the changelog](https://changelog.com)
 
 **And hundreds more coming soon.**
