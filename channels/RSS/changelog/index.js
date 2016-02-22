@@ -1,4 +1,4 @@
-var website = 'http://changelog.com/';
+var website = 'http://changelog.com/'
 
 module.exports = {
   name: "changelog",
@@ -22,26 +22,54 @@ var mediaParser = require("./mediaParser")
 // http://media.object/discover/changelog/tag/javascript
 
 function discoverChannel(params, callback) {
+  var pageDiscoveries = {}
+
+  http.loadPage(website, function(body) {
+    var channelObjectType = params.channelObjectType
+
+    if (!channelObjectType)
+      channelObjectType = "default"
+
+    switch (channelObjectType.toLowerCase()) {
+    case "tags":
+      pageDiscoveries = mediaParser.parseTags(body)
+      break
+
+    case "menu":
+      pageDiscoveries = mediaParser.parseMenu(body)
+      break
+
+    default:
+      pageDiscoveries.tags = mediaParser.parseTags(body)
+      pageDiscoveries.menu = mediaParser.parseMenu(body)
+      break
+    }
+
+    callback(null, pageDiscoveries)
+  })
 }
 
 function discoverMediaObjects(params, callback) {
-  console.log(params)
-
   if (!params.mediaObjectType)
     return discoverMediaObjectsOnIndex(params, callback)
 }
 
 function discoverMediaObjectsOnIndex(params, callback) {
-  console.log("Load page: " + website)
   http.loadPage(website, function(body) {
-    mediaParser.parseIndex(body, callback)
+    var mediaObjects = mediaParser.parsePage(body)
+    callback(null, mediaObjects)
   })
 }
 
 function searchMediaObjects(params, callback) {
 }
 
-function getMediaObjectInfo(params, callback) {
-  // Now when we request more/extended information about a particular media object, 
-  // we will also add it to our database.
+function getMediaObjectInfo(mediaObjectUrl, callback) {
+  http.loadPage(mediaObjectUrl, function(body) {
+    var mediaObjects = mediaParser.parsePage(body)
+    if (!mediaObjects || mediaObjects.length <= 0)
+      callback("Could not read media object")
+    else
+      callback(null, mediaObjects[0])
+  })
 }

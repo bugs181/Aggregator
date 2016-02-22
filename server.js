@@ -16,6 +16,7 @@ app.cursor = cursor
 // Bring in app middleware & routes
 require('./middleware/app')(app, config)
 require('./routes')(app, config)
+require('./middleware/socket')(app, config)
 
 // Start app
 const port = config.http.port
