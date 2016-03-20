@@ -1,3 +1,5 @@
+'use strict'
+
 // Parse HTML stuff and output MediaObjects
 
 module.exports = {
@@ -8,7 +10,7 @@ module.exports = {
 
 
 // Modules
-var cheerio = require("cheerio")
+let cheerio = require('cheerio')
 
 // Methods
 function parsePage(body) {
@@ -17,18 +19,18 @@ function parsePage(body) {
   $ = cheerio.load(body)
 
   // If we can obtain the changelog image.
-  var siteImage
-  var headerHTML = $("header.page-container")
+  let siteImage
+  let headerHTML = $('header.page-container')
   if (headerHTML) {
-    var headerImage = headerHTML.find("img")
-    siteImage = headerImage.attr("src")
+    let headerImage = headerHTML.find('img')
+    siteImage = headerImage.attr('src')
   }
   
-  var mediaObjects = []
-  var mediaObjectHTML = $("article")
+  let mediaObjects = []
+  let mediaObjectHTML = $('article')
       .each(function(i, elem) {
         if (elem) {
-          var mediaObject = parseMediaObjectHTML(elem)
+          let mediaObject = parseMediaObjectHTML(elem)
           
           if (siteImage)
             mediaObject.image = siteImage
@@ -45,24 +47,25 @@ function parseMediaObjectHTML(elem) {
 
   var html = $(elem)
 
-  var alink = html.find("a")
+  var alink = html.find('a')
   var title = alink.text()
   var link = alink.attr('href')
 
   if (title)
     title = title.trim()
 
-  var postContent = html.find("p")
+  var postContent = html.find('p')
   var description = postContent.text()
 
   var mediaObject = {
     name: title,
     description: description,
-    link: link
+    link: link,
+    type: 'podcast',
   }
 
-  // If article contains a podcast
-  var contentHTML = html.find("audio")
+  // If article contains a podcast (only available when parsing single media object page)
+  var contentHTML = html.find('audio')
   content = contentHTML.attr('src')
 
   if (content)
@@ -98,9 +101,9 @@ function parseTags(body) {
   $ = cheerio.load(body)
 
   var mediaTags = []
-  var mediaTagsHTML = $("nav.nav-tags")
+  var mediaTagsHTML = $('nav.nav-tags')
   
-  var tags = mediaTagsHTML.find("li")
+  var tags = mediaTagsHTML.find('li')
   tags.each(function(i, elem) {
     if (elem) {
       var mediaTag = parseMediaTagHTML(elem)
@@ -114,8 +117,8 @@ function parseTags(body) {
 function parseMediaTagHTML(elem) {
   var html = $(elem)
 
-  var tagHtml = html.find("a")
-  var tagLink = tagHtml.attr("href")
+  var tagHtml = html.find('a')
+  var tagLink = tagHtml.attr('href')
   var tagName = tagHtml.text()
 
   return {

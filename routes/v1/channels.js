@@ -1,6 +1,5 @@
 'use strict'
 
-//var channels = require('./channels')
 let config = {}
 let channels = []
 
@@ -34,29 +33,31 @@ module.exports = function(app, cfg, chnls) {
 
 	// Search for something in particular on a given channel.
 	app.get('/search/:channel', searchMediaObjects)
+
+	// Auth for channel
+	// todo: Add stubs for auth
 }
 
 
 
 function listChannels(req, res) {
 	let listChannelType = ((req.params.channelType) ? req.params.channelType.toLowerCase() : null)
-	let channelsArray = Object.keys(channels).map(function(key) { return channels[key] })
 
-	let channelList = []
-	for (let channelRaw of channelsArray) {
-		if (!channelRaw.name)  continue
-		if (listChannelType && channelRaw.type && listChannelType != channelRaw.type.toLowerCase())  continue
+	let foundChannels = []
+	for (let channel of channels) {
+		if (!channel.name) continue
+		if (listChannelType && channel.type && listChannelType != channel.type.toLowerCase()) continue
 
 		let channel = {
-			name: channelRaw.name,
-			type: channelRaw.type,
-			website: channelRaw.website
+			name: channel.name,
+			type: channel.type,
+			website: channel.website,
 		}
 
-		channelList.push(channel)
+		foundChannels.push(channel)
 	}
 
-	res.status(200).send(channelList)
+	res.status(200).send(foundChannels)
 }
 
 function discoverChannels(req, res) {
@@ -80,15 +81,15 @@ function discoverChannelObjects(req, res) {
 	let channel = findChannel(channelReq)
 
 	if (!channel)
-		return res.status(404).send({ success: false, description: "Channel not found" })
+		return res.status(404).send({ success: false, description: 'Channel not found' })
 
 	let discoverFn = channel.discoverChannel
 	if (!discoverFn)
-		return res.status(500).send({ success: false, description: "Channel does not support discovery" })
+		return res.status(500).send({ success: false, description: 'Channel does not support discovery' })
 
 	discoverFn(req.params, function(err, mediaObjects) {
 		if (err)
-			return res.status(404).send({ success: false, description: "No objects found" })
+			return res.status(404).send({ success: false, description: 'No objects found' })
 
 		res.status(200).send(mediaObjects)
 	})
@@ -98,7 +99,6 @@ function discoverMediaObjects(req, res) {
 	/* Examples:
 	 * http://media.object/discover/primewire.ag/objects
 	 * http://media.object/discover/primewire.ag/objects/movies
-	 * http://media.object/discover/primewire.ag/objects/movies?tag=comedy
 	 * http://media.object/discover/primewire.ag/objects/movies/tag/comedy
 	 * http://media.object/discover/primewire.ag/objects/any/tag/comedy
 	*/
@@ -107,15 +107,15 @@ function discoverMediaObjects(req, res) {
 	let channel = findChannel(channelReq)
 
 	if (!channel)
-		return res.status(404).send({ success: false, description: "Channel not found" })
+		return res.status(404).send({ success: false, description: 'Channel not found' })
 
 	let discoverFn = channel.discoverMediaObjects
 	if (!discoverFn)
-		return res.status(500).send({ success: false, description: "Channel does not support discovery" })
+		return res.status(500).send({ success: false, description: 'Channel does not support discovery' })
 
 	discoverFn(req.params, function(err, mediaObjects) {
 		if (err)
-			return res.status(404).send({ success: false, description: "No objects found" })
+			return res.status(404).send({ success: false, description: 'No objects found' })
 
 		let mediaObjectsModified = []
 		for (let mediaObject of mediaObjects) {
@@ -133,22 +133,22 @@ function getMediaObjectInfo(req, res) {
 	let channel = findChannel(channelReq)
 
 	if (!channel)
-		return res.status(404).send({ success: false, description: "Channel not found" })
+		return res.status(404).send({ success: false, description: 'Channel not found' })
 
 	let getInfoFn = channel.getMediaObjectInfo
 	if (!getInfoFn)
-		return res.status(500).send({ success: false, description: "Channel does not support this operation" })
+		return res.status(500).send({ success: false, description: 'Channel does not support this operation' })
 
 	let link = req.query.link
 	getInfoFn(link, function(err, mediaObject) {
 		if (err)
-			return res.status(404).send({ success: false, description: "No objects found" })
+			return res.status(404).send({ success: false, description: 'No objects found' })
 
 		let mediaObjectModified = addMediaObjectInfo(channel, mediaObject)
 		if (validateMediaObject(mediaObjectModified))
 			res.status(200).send(mediaObjectModified)
 		else
-			res.status(404).send({ success: false, description: "Media object could not be validated" })
+			res.status(404).send({ success: false, description: 'Media object could not be validated' })
 	})
 }
 
@@ -166,7 +166,6 @@ function findChannel(channelName) {
 
 function addMediaObjectInfo(channel, mediaObject) {
 	mediaObject.channel = channel.name
-	mediaObject.type = "podcast"
 
 	return mediaObject
 }

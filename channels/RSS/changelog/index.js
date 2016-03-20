@@ -1,11 +1,13 @@
-var website = 'http://changelog.com/'
+'use strict'
+
+let website = 'http://changelog.com/'
 
 module.exports = {
-  name: "changelog",
-  type: "RSS",
+  name: 'changelog',
+  type: 'RSS',
   website: website,
 
-  channelType: "aggregator",
+  channelType: 'aggregator',
 
   discoverChannel: discoverChannel,
   discoverMediaObjects: discoverMediaObjects,
@@ -15,27 +17,34 @@ module.exports = {
 
 
 // Helper modules
-var http = require("./helpers/http")
-var mediaParser = require("./mediaParser")
+let http = require('./helpers/http')
+let mediaParser = require('./mediaParser')
 
-
-// http://media.object/discover/changelog/tag/javascript
 
 function discoverChannel(params, callback) {
-  var pageDiscoveries = {}
+  /* Examples:
+   * http://media.object/discover/changelog/tags
+   * http://media.object/discover/changelog/tag/javascript
+   */
+
+  let pageDiscoveries = {}
 
   http.loadPage(website, function(body) {
-    var channelObjectType = params.channelObjectType
+    let channelObjectType = params.channelObjectType
 
     if (!channelObjectType)
-      channelObjectType = "default"
+      channelObjectType = 'default'
 
     switch (channelObjectType.toLowerCase()) {
-    case "tags":
+    case 'tags':
       pageDiscoveries = mediaParser.parseTags(body)
       break
 
-    case "menu":
+    case 'tag':
+      // todo: discover from individual tag
+      break
+
+    case 'menu':
       pageDiscoveries = mediaParser.parseMenu(body)
       break
 
@@ -50,13 +59,13 @@ function discoverChannel(params, callback) {
 }
 
 function discoverMediaObjects(params, callback) {
-  if (!params.mediaObjectType)
+  if (!params.mediaObjectType || params.mediaObjectType === 'podcast')
     return discoverMediaObjectsOnIndex(params, callback)
 }
 
 function discoverMediaObjectsOnIndex(params, callback) {
   http.loadPage(website, function(body) {
-    var mediaObjects = mediaParser.parsePage(body)
+    let mediaObjects = mediaParser.parsePage(body)
     callback(null, mediaObjects)
   })
 }
@@ -66,9 +75,9 @@ function searchMediaObjects(params, callback) {
 
 function getMediaObjectInfo(mediaObjectUrl, callback) {
   http.loadPage(mediaObjectUrl, function(body) {
-    var mediaObjects = mediaParser.parsePage(body)
+    let mediaObjects = mediaParser.parsePage(body)
     if (!mediaObjects || mediaObjects.length <= 0)
-      callback("Could not read media object")
+      callback('Could not read media object')
     else
       callback(null, mediaObjects[0])
   })
