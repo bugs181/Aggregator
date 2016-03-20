@@ -1,4 +1,6 @@
-var channelModules = [ // const channelModules ?
+'use strict'
+
+let channelModules = [ // const channelModules ?
 
   /* Aggregator channels */
   "television/aggregators/primewire.ag",
@@ -11,15 +13,15 @@ var channelModules = [ // const channelModules ?
   "RSS/changelog"
 ]
 
-var cursor
+let cursor
 
 function loadChannels() {
-  var channels = []
+  let channels = []
 
-  for (channelModule of channelModules) {
+  for (let channelModule of channelModules) {
     try {
 
-      var channel = require("../channels/" + channelModule)
+      let channel = require("../channels/" + channelModule)
       channels.push(channel)
       cursor.hex('#e522c9').write("Loaded " + channelModule + "\r\n")
 
@@ -39,7 +41,7 @@ function loadChannels() {
 module.exports = function(app, config) {
   cursor = app.cursor
 
-  var channels = loadChannels()
+  let channels = loadChannels()
   Object.freeze(channels) // Don't allow channels to be modified from this point forward.
 
   return channels

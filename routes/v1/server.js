@@ -18,7 +18,7 @@ function serverInfo(req, res) {
 		// todo: Add commit info
 
 		// Added a few more bits of info
-		version: "02182016", // Month/Day/Year
-		service: "MediaChannel"
+		version: '02182016', // Month/Day/Year
+		service: 'MediaChannel'
 	});
 }

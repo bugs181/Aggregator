@@ -1,6 +1,8 @@
+'use strict'
+
 //var channels = require('./channels')
-var config = {}
-var channels = []
+let config = {}
+let channels = []
 
 
 module.exports = function(app, cfg, chnls) {
@@ -37,15 +39,15 @@ module.exports = function(app, cfg, chnls) {
 
 
 function listChannels(req, res) {
-	var listChannelType = ((req.params.channelType) ? req.params.channelType.toLowerCase() : null)
-	var channelsArray = Object.keys(channels).map(function(key) { return channels[key] })
+	let listChannelType = ((req.params.channelType) ? req.params.channelType.toLowerCase() : null)
+	let channelsArray = Object.keys(channels).map(function(key) { return channels[key] })
 
-	var channelList = []
-	for (var channelRaw of channelsArray) {
+	let channelList = []
+	for (let channelRaw of channelsArray) {
 		if (!channelRaw.name)  continue
 		if (listChannelType && channelRaw.type && listChannelType != channelRaw.type.toLowerCase())  continue
 
-		var channel = {
+		let channel = {
 			name: channelRaw.name,
 			type: channelRaw.type,
 			website: channelRaw.website
@@ -74,13 +76,13 @@ function discoverChannelObjects(req, res) {
 	 * http://media.object/discover/primewire.ag/tags
 	*/
 
-	var channelReq = req.params.channel
-	var channel = findChannel(channelReq)
+	let channelReq = req.params.channel
+	let channel = findChannel(channelReq)
 
 	if (!channel)
 		return res.status(404).send({ success: false, description: "Channel not found" })
 
-	var discoverFn = channel.discoverChannel
+	let discoverFn = channel.discoverChannel
 	if (!discoverFn)
 		return res.status(500).send({ success: false, description: "Channel does not support discovery" })
 
@@ -101,13 +103,13 @@ function discoverMediaObjects(req, res) {
 	 * http://media.object/discover/primewire.ag/objects/any/tag/comedy
 	*/
 
-	var channelReq = req.params.channel
-	var channel = findChannel(channelReq)
+	let channelReq = req.params.channel
+	let channel = findChannel(channelReq)
 
 	if (!channel)
 		return res.status(404).send({ success: false, description: "Channel not found" })
 
-	var discoverFn = channel.discoverMediaObjects
+	let discoverFn = channel.discoverMediaObjects
 	if (!discoverFn)
 		return res.status(500).send({ success: false, description: "Channel does not support discovery" })
 
@@ -115,9 +117,9 @@ function discoverMediaObjects(req, res) {
 		if (err)
 			return res.status(404).send({ success: false, description: "No objects found" })
 
-		var mediaObjectsModified = []
-		for (var mediaObject of mediaObjects) {
-			var mediaObjectModified = addMediaObjectInfo(channel, mediaObject)
+		let mediaObjectsModified = []
+		for (let mediaObject of mediaObjects) {
+			let mediaObjectModified = addMediaObjectInfo(channel, mediaObject)
 			if (validateMediaObject(mediaObjectModified))
 				mediaObjectsModified.push(mediaObjectModified)
 		}
@@ -127,22 +129,22 @@ function discoverMediaObjects(req, res) {
 }
 
 function getMediaObjectInfo(req, res) {
-	var channelReq = req.params.channel
-	var channel = findChannel(channelReq)
+	let channelReq = req.params.channel
+	let channel = findChannel(channelReq)
 
 	if (!channel)
 		return res.status(404).send({ success: false, description: "Channel not found" })
 
-	var getInfoFn = channel.getMediaObjectInfo
+	let getInfoFn = channel.getMediaObjectInfo
 	if (!getInfoFn)
 		return res.status(500).send({ success: false, description: "Channel does not support this operation" })
 
-	var link = req.query.link
+	let link = req.query.link
 	getInfoFn(link, function(err, mediaObject) {
 		if (err)
 			return res.status(404).send({ success: false, description: "No objects found" })
 
-		var mediaObjectModified = addMediaObjectInfo(channel, mediaObject)
+		let mediaObjectModified = addMediaObjectInfo(channel, mediaObject)
 		if (validateMediaObject(mediaObjectModified))
 			res.status(200).send(mediaObjectModified)
 		else
@@ -158,15 +160,8 @@ function searchMediaObjects(req, res) {
 }
 
 function findChannel(channelName) {
-	var channelsArray = Object.keys(channels).map(function(key) { return channels[key] })
-
-	for (var channel of channelsArray) {
-		if (!channel.name)  continue
-		if (channel.name == channelName)
-			return channel
-	}
-
-	return null
+	let foundChannels = channels.filter( channel => { return channel.name === channelName } )
+	return foundChannels[0]
 }
 
 function addMediaObjectInfo(channel, mediaObject) {

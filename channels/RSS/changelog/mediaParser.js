@@ -120,7 +120,8 @@ function parseMediaTagHTML(elem) {
 
   return {
     name: tagName,
-    link: tagLink
+    link: tagLink,
+    type: 'tag',
   }
 }
 
