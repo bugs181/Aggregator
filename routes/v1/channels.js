@@ -23,11 +23,11 @@ module.exports = function(app, cfg, chnls) {
 	app.get('/discover/:channel/objects/:mediaObjectType/:discoveryType/:discoveryParam', discoverMediaObjects)
 
 	// Discover sections and other things on select channel
-	app.get('/discover/:channel', discoverChannelObjects)
-	app.get('/discover/:channel/:channelObjectType', discoverChannelObjects)
+	app.get('/discover/:channel', discoverChannelSections)
+	app.get('/discover/:channel/:channelObjectType', discoverChannelSections)
 	// ^ This one conflicts with /objects, so defined after.
 
-	// Get more info about a particular media object.
+	// Get more info about particular media objects.
 	app.get('/info/:channel', getMediaObjectInfo)
 	app.post('/info/:channel/batch', getMediaObjectInfoBatch)
 
@@ -70,11 +70,12 @@ function discoverChannels(req, res) {
 	// Can output things like tags, description, sections, etc.
 }
 
-function discoverChannelObjects(req, res) {
+function discoverChannelSections(req, res) {
 	// Used for discovering different sections on the channel (like tags), and potentially related object sets.
 	/* Examples:
-	 * http://media.object/discover/primewire.ag
-	 * http://media.object/discover/primewire.ag/tags
+	 * http://media.object/discover/changelog
+	 * http://media.object/discover/changelog/tags
+	 * http://media.object/discover/changelog/tag/javascript
 	*/
 
 	let channelReq = req.params.channel
@@ -83,7 +84,7 @@ function discoverChannelObjects(req, res) {
 	if (!channel)
 		return res.status(404).send({ success: false, description: 'Channel not found' })
 
-	let discoverFn = channel.discoverChannel
+	let discoverFn = channel.discoverChannelSections
 	if (!discoverFn)
 		return res.status(500).send({ success: false, description: 'Channel does not support discovery' })
 
@@ -99,8 +100,9 @@ function discoverMediaObjects(req, res) {
 	/* Examples:
 	 * http://media.object/discover/primewire.ag/objects
 	 * http://media.object/discover/primewire.ag/objects/movies
+	 * http://media.object/discover/primewire.ag/objects/shows
 	 * http://media.object/discover/primewire.ag/objects/movies/tag/comedy
-	 * http://media.object/discover/primewire.ag/objects/any/tag/comedy
+	 * http://media.object/discover/primewire.ag/objects/* or any/tag/comedy
 	*/
 
 	let channelReq = req.params.channel

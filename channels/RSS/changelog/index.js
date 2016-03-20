@@ -9,7 +9,7 @@ module.exports = {
 
   channelType: 'aggregator',
 
-  discoverChannel: discoverChannel,
+  discoverChannelSections: discoverChannelSections,
   discoverMediaObjects: discoverMediaObjects,
   searchMediaObjects: searchMediaObjects,
   getMediaObjectInfo: getMediaObjectInfo
@@ -21,8 +21,9 @@ let http = require('./helpers/http')
 let mediaParser = require('./mediaParser')
 
 
-function discoverChannel(params, callback) {
+function discoverChannelSections(params, callback) {
   /* Examples:
+   * http://media.object/discover/changelog
    * http://media.object/discover/changelog/tags
    * http://media.object/discover/changelog/tag/javascript
    */

@@ -16,7 +16,7 @@ let cheerio = require('cheerio')
 function parsePage(body) {
   // This method parses both the index page and individual media object's index page.
 
-  $ = cheerio.load(body)
+  let $ = cheerio.load(body)
 
   // If we can obtain the changelog image.
   let siteImage
@@ -45,19 +45,19 @@ function parsePage(body) {
 function parseMediaObjectHTML(elem) {
   // Parse individual HTML elements from page.
 
-  var html = $(elem)
+  let html = $(elem)
 
-  var alink = html.find('a')
-  var title = alink.text()
-  var link = alink.attr('href')
+  let alink = html.find('a')
+  let title = alink.text()
+  let link = alink.attr('href')
 
   if (title)
     title = title.trim()
 
-  var postContent = html.find('p')
-  var description = postContent.text()
+  let postContent = html.find('p')
+  let description = postContent.text()
 
-  var mediaObject = {
+  let mediaObject = {
     name: title,
     description: description,
     link: link,
@@ -65,13 +65,13 @@ function parseMediaObjectHTML(elem) {
   }
 
   // If article contains a podcast (only available when parsing single media object page)
-  var contentHTML = html.find('audio')
+  let contentHTML = html.find('audio')
   content = contentHTML.attr('src')
 
   if (content)
     mediaObject.content = content
 
-  // var sponsorsHTML = html.find("sponsor")
+  // let sponsorsHTML = html.find("sponsor")
   // TODO: Finish later. No easy way to grab sponsors.
 
   return mediaObject
@@ -98,15 +98,15 @@ function parseMediaObjectHTML(elem) {
 
 
 function parseTags(body) {
-  $ = cheerio.load(body)
+  let $ = cheerio.load(body)
 
-  var mediaTags = []
-  var mediaTagsHTML = $('nav.nav-tags')
+  let mediaTags = []
+  let mediaTagsHTML = $('nav.nav-tags')
   
-  var tags = mediaTagsHTML.find('li')
+  let tags = mediaTagsHTML.find('li')
   tags.each(function(i, elem) {
     if (elem) {
-      var mediaTag = parseMediaTagHTML(elem)
+      let mediaTag = parseMediaTagHTML(elem)
       mediaTags.push(mediaTag)
     }
   })
@@ -115,11 +115,13 @@ function parseTags(body) {
 }
 
 function parseMediaTagHTML(elem) {
-  var html = $(elem)
+  let $ = cheerio.load(elem)
 
-  var tagHtml = html.find('a')
-  var tagLink = tagHtml.attr('href')
-  var tagName = tagHtml.text()
+  let html = $(elem)
+
+  let tagHtml = html.find('a')
+  let tagLink = tagHtml.attr('href')
+  let tagName = tagHtml.text()
 
   return {
     name: tagName,
