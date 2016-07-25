@@ -5,12 +5,12 @@
     <databaseInfo>
         <version>134481920</version>
         <UUID>6A1137B0-681B-4F57-8A0C-8D112A68CA5C</UUID>
-        <nextObjectID>126</nextObjectID>
+        <nextObjectID>130</nextObjectID>
         <metadata>
             <plist version="1.0">
                 <dict>
                     <key>NSPersistenceFrameworkVersion</key>
-                    <integer>641</integer>
+                    <integer>526</integer>
                     <key>NSStoreModelVersionHashes</key>
                     <dict>
                         <key>LMCookieJar</key>
@@ -164,7 +164,7 @@
     </object>
     <object type="LMREQUEST" id="z114">
         <attribute name="uuid" type="string">470DE576-9F62-4D6C-8DE4-8508A5A3A26A</attribute>
-        <attribute name="url" type="string">["http:\\/\\/",{"data":{"environmentVariable":"D49754B1-A766-4B8A-8FBD-F217E8D5058F"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},":",{"data":{"environmentVariable":"F0AB0F59-AD01-49FC-BFE0-9D6699030C36"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/",{"data":{"environmentVariable":"5C7F3604-420A-4DDA-877E-675AC65F661A"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/discover\\/changelog\\/objects"]</attribute>
+        <attribute name="url" type="string">["http:\\/\\/",{"data":{"environmentVariable":"D49754B1-A766-4B8A-8FBD-F217E8D5058F"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},":",{"data":{"environmentVariable":"F0AB0F59-AD01-49FC-BFE0-9D6699030C36"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/",{"data":{"environmentVariable":"5C7F3604-420A-4DDA-877E-675AC65F661A"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/discover\\/changelog.com\\/objects"]</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>
@@ -194,7 +194,7 @@
     </object>
     <object type="LMREQUEST" id="z116">
         <attribute name="uuid" type="string">0C5B3227-1790-4026-A930-BA59BF9145E0</attribute>
-        <attribute name="url" type="string">["http:\\/\\/",{"data":{"environmentVariable":"D49754B1-A766-4B8A-8FBD-F217E8D5058F"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},":",{"data":{"environmentVariable":"F0AB0F59-AD01-49FC-BFE0-9D6699030C36"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/",{"data":{"environmentVariable":"5C7F3604-420A-4DDA-877E-675AC65F661A"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/discover\\/changelog\\/tags"]</attribute>
+        <attribute name="url" type="string">["http:\\/\\/",{"data":{"environmentVariable":"D49754B1-A766-4B8A-8FBD-F217E8D5058F"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},":",{"data":{"environmentVariable":"F0AB0F59-AD01-49FC-BFE0-9D6699030C36"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/",{"data":{"environmentVariable":"5C7F3604-420A-4DDA-877E-675AC65F661A"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/discover\\/changelog.com\\/tags"]</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>
@@ -209,7 +209,7 @@
     </object>
     <object type="LMREQUEST" id="z117">
         <attribute name="uuid" type="string">202B3A5E-0743-461D-84AE-666FB99C6A58</attribute>
-        <attribute name="url" type="string">["http:\\/\\/",{"data":{"environmentVariable":"D49754B1-A766-4B8A-8FBD-F217E8D5058F"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},":",{"data":{"environmentVariable":"F0AB0F59-AD01-49FC-BFE0-9D6699030C36"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/",{"data":{"environmentVariable":"5C7F3604-420A-4DDA-877E-675AC65F661A"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/info\\/changelog\\/?link=https:\\/\\/changelog.com\\/195\\/"]</attribute>
+        <attribute name="url" type="string">["http:\\/\\/",{"data":{"environmentVariable":"D49754B1-A766-4B8A-8FBD-F217E8D5058F"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},":",{"data":{"environmentVariable":"F0AB0F59-AD01-49FC-BFE0-9D6699030C36"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/",{"data":{"environmentVariable":"5C7F3604-420A-4DDA-877E-675AC65F661A"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/info\\/changelog.com\\/?link=https:\\/\\/changelog.com\\/195\\/"]</attribute>
         <attribute name="storecookies" type="bool">1</attribute>
         <attribute name="sendcookies" type="bool">1</attribute>
         <attribute name="redirectmethod" type="bool">0</attribute>
@@ -286,5 +286,55 @@
         <attribute name="value" type="string">8020</attribute>
         <relationship name="environment" type="1/1" destination="LMENVIRONMENT" idrefs="z102"></relationship>
         <relationship name="variable" type="1/1" destination="LMENVIRONMENTVARIABLE" idrefs="z106"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z127">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z128"></relationship>
+    </object>
+    <object type="LMREQUEST" id="z128">
+        <attribute name="uuid" type="string">DB9726F9-6778-4F37-A9F8-481D11E83578</attribute>
+        <attribute name="url" type="string">["http:\\/\\/",{"data":{"environmentVariable":"D49754B1-A766-4B8A-8FBD-F217E8D5058F"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},":",{"data":{"environmentVariable":"F0AB0F59-AD01-49FC-BFE0-9D6699030C36"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/",{"data":{"environmentVariable":"5C7F3604-420A-4DDA-877E-675AC65F661A"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/discover\\/primewire.ag\\/objects"]</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">GET</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="order" type="int64">6</attribute>
+        <attribute name="name" type="string">Retrieve movies from Primewire</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z127"></relationship>
+    </object>
+    <object type="LMREQUEST" id="z129">
+        <attribute name="uuid" type="string">9A56B951-B721-4F7C-B95C-F174D2FA34DC</attribute>
+        <attribute name="url" type="string">["http:\\/\\/",{"data":{"environmentVariable":"D49754B1-A766-4B8A-8FBD-F217E8D5058F"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},":",{"data":{"environmentVariable":"F0AB0F59-AD01-49FC-BFE0-9D6699030C36"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/",{"data":{"environmentVariable":"5C7F3604-420A-4DDA-877E-675AC65F661A"},"identifier":"com.luckymarmot.EnvironmentVariableDynamicValue"},"\\/search\\/primewire.ag?term=Doctor+Who"]</attribute>
+        <attribute name="storecookies" type="bool">1</attribute>
+        <attribute name="sendcookies" type="bool">1</attribute>
+        <attribute name="redirectmethod" type="bool">0</attribute>
+        <attribute name="redirectauthorization" type="bool">0</attribute>
+        <attribute name="method" type="string">GET</attribute>
+        <attribute name="followredirects" type="bool">0</attribute>
+        <attribute name="order" type="int64">7</attribute>
+        <attribute name="name" type="string">Retrieve shows from Primewire Duplicate</attribute>
+        <relationship name="parent" type="0/1" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="children" type="0/0" destination="LMREQUESTTREEITEM"></relationship>
+        <relationship name="headers" type="0/0" destination="LMKEYVALUE" idrefs="z130"></relationship>
+    </object>
+    <object type="LMKEYVALUE" id="z130">
+        <attribute name="value" type="string"></attribute>
+        <attribute name="order" type="int64">0</attribute>
+        <attribute name="name" type="string"></attribute>
+        <attribute name="enabled" type="bool">1</attribute>
+        <relationship name="groupforbodyparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforheaders" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="groupforurlparameters" type="0/1" destination="LMREQUESTGROUP"></relationship>
+        <relationship name="request" type="0/1" destination="LMREQUEST" idrefs="z129"></relationship>
     </object>
 </database>

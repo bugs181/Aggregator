@@ -1,4 +1,6 @@
-var express = require('express')
+'use strict'
+
+let express = require('express')
 
 module.exports = function(app, config) {
 
@@ -9,7 +11,7 @@ module.exports = function(app, config) {
 	require('./routes/v1/server')(app, config)
 
 	// v1 of the API, supports http and socket.io streams
-	var v1 = express.Router()
+	let v1 = express.Router()
 	require('./routes/v1/channels')(v1, config, channels)
 	app.use('/api/v1', v1)
 

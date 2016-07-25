@@ -16,6 +16,9 @@ let cheerio = require('cheerio')
 function parsePage(body) {
   // This method parses both the index page and individual media object's index page.
 
+  if (!body)
+    return []
+
   let $ = cheerio.load(body)
 
   // If we can obtain the changelog image.
@@ -45,6 +48,7 @@ function parsePage(body) {
 function parseMediaObjectHTML(elem) {
   // Parse individual HTML elements from page.
 
+  let $ = cheerio.load(elem)
   let html = $(elem)
 
   let alink = html.find('a')
@@ -66,10 +70,24 @@ function parseMediaObjectHTML(elem) {
 
   // If article contains a podcast (only available when parsing single media object page)
   let contentHTML = html.find('audio')
-  content = contentHTML.attr('src')
+  let content = contentHTML.attr('src')
 
-  if (content)
+  if (content) {
     mediaObject.content = content
+  } else
+    mediaObject.reference = true // Tell MediaChannel that this is only a reference to the actual Media Object.
+
+  // I don't know if .reference is the correct way of doing this.. since technically EVERYTHING in MC is Media Object.
+  // Instead, we should consider changing the 'type' to reference.. but that might throw some clients off, rather than
+  // having a similar 'type' and using a 'reference' flag. Which 'ref' flag makes more sense.
+  // Then we can do cleanups on dead references..
+  // The more I think about it; the more I like the reference flag.
+  // We can do post processing on detection of that flag.
+
+/*
+MediaChannel aids in helping you find dead or broken links, especially prominent across domains!
+For example, if you find a dead link on one website, just mark it as such and it will be marked across all websites.
+*/
 
   // let sponsorsHTML = html.find("sponsor")
   // TODO: Finish later. No easy way to grab sponsors.

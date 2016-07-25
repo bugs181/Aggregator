@@ -1,9 +1,11 @@
+'use strict'
 
 // Modules
-var cheerio = require("cheerio");
+let cheerio = require('cheerio');
 
 // Variables
-var portal = "Primewire.ag"
+let portal = 'Primewire.ag'
+let website = 'http://www.primewire.ag'
 
 
 module.exports = {
@@ -14,7 +16,7 @@ module.exports = {
 }
 
 // Overview:
-// parseIndex() + parseMediaObjectHTML() - Parses media objects from the directory/index type pages.
+// parseIndex() > parseMediaObjectHTML() - Parses media objects from the directory/index type pages.
 // parseEpisodeList() + parseMediaListHTML() - Parses episode list for TV Shows into URLs
 // parseInfoPage() + parseMediaInfoHTML() - Parses media information like synopsis, imdb, sources, etc.
 
@@ -23,58 +25,57 @@ module.exports = {
 
 
 // Media object parsing methods.
-function parseIndex(body, req, res) {
-	$ = cheerio.load(body);
-	
-	var mediaObjects = []
+function parseIndex(body, params, callback) {
+	if (!body)
+		return callback('No body found')
 
-	var mediaObjectHTML = $("div.index_container").find("div.index_item")
+	let $ = cheerio.load(body)
+	
+	let mediaObjects = []
+
+	let mediaObjectHTML = $('div.index_container').find('div.index_item')
 			.each(function(i, elem) {
 
 				if (elem) {
 					
 					// Set up a new media object
-					var mediaObject = new mediaObjectShowClass();
-					mediaObject.type = parseMediaType(req.params.mediaType)
-					mediaObject.portal = portal // Kind of important. ;)
+					let mediaObject = new mediaObjectShowClass()
+					mediaObject.type = parseMediaType(params.mediaObjectType)
 
-					// Meda object in, media object out. xD
-					mediaObject = parseMediaObjectHTML(elem, mediaObject)
-					mediaObjects.push(mediaObject);
+					parseMediaObjectHTML(elem, mediaObject)
+					mediaObjects.push(mediaObject)
 				}
 
 			})
 
-	res.json(mediaObjects)
+	callback(null, mediaObjects)
 }
 
 function parseMediaObjectHTML(mediaObjectHTML, mediaObject) {
-	// This function returns a mediaObject formatted JSON object.
+	let $ = cheerio.load(mediaObjectHTML)
+	let html = $(mediaObjectHTML)
 
-	var html = $(mediaObjectHTML)
-
-	var alink = html.find("a")
-	var img = alink.find("img")
+	let alink = html.find('a')
+	let img = alink.find('img')
 	
 	// Get the title, remove the 'Watch ' from 'Watch $showName'
-	mediaObject.title = img.attr("alt")
-	//if (mediaObject.type == "show")  mediaObject.title = mediaObject.title.replace("Watch ", '')
-	// why looking for type?? replace 'Watch' anyway.. becuase it will always be the first..
-	mediaObject.title = mediaObject.title.replace("Watch ", '')
+	mediaObject.title = img.attr('alt') || ''
+	mediaObject.title = mediaObject.title.replace('Watch ', '')
 
 	// Poster image
 	mediaObject.images = new mediaObjectImages()
-	mediaObject.images.poster = "http:" + img.attr("src")
+	mediaObject.images.poster = 'http:' + img.attr('src')
 
 	// Example info page URL: /watch-2717625-How-the-Universe-Works-online-free
-	mediaObject.info = alink.attr("href")
+	// .link is always the absolute URL of the media object.
+	mediaObject.link = website + alink.attr('href')
 
 	// Genres
 	mediaObject.genres = []
-	var genresHTML = html.find("div.item_categories")
-	genresHTML.find("a").each(function(i, el) {
+	let genresHTML = html.find('div.item_categories')
+	genresHTML.find('a').each(function(i, el) {
 		if (el) {
-			var genre = new mediaObjectGenre()
+			let genre = new mediaObjectGenre()
 			genre.title = $(el).text()
 			mediaObject.genres.push( genre )
 		}
@@ -82,27 +83,32 @@ function parseMediaObjectHTML(mediaObjectHTML, mediaObject) {
 
 	// rating is based on the width of the pixels
 	// example: width: 20px;
-	var ratingsHTML = html.find("div.index_ratings")
-	var ratingStyle = ratingsHTML.find(".current-rating").attr("style")
-	var rating = ratingStyle.replace(/[^0-9]/g, '');
+	let ratingsHTML = html.find('div.index_ratings')
+	let ratingStyle = ratingsHTML.find('.current-rating').attr('style')
+	let rating = ratingStyle.replace(/[^0-9]/g, '');
 	mediaObject.rating = rating
 
 	// Get year from title
-	var title = alink.attr("title")
-	var regexYear = /(\d\d\d\d)/g
-	var yearMatch = title.match(regexYear)
+	let title = alink.attr('title')
+	let regexYear = /(\d\d\d\d)/g
+	let yearMatch = title.match(regexYear)
 
 	if (yearMatch)  mediaObject.year = yearMatch[0]
-
-	return mediaObject
 }
 
 function parseMediaType(browsingMediaType) {
 	switch (browsingMediaType) {
-		case "movies": return "movie"
-		case "shows": return "show"
-		case "music": return "music"
-		default: return "unknown"
+		case 'movies': 
+			return 'movie'
+
+		case 'shows': 
+			return 'show'
+
+		case 'music': 
+			return 'music'
+
+		default: 
+			return 'movie'
 	}
 }
 
@@ -119,28 +125,28 @@ function parseInfoPage(body, req, res) {
 
 
 	// Set up a new media object
-	var mediaObject = new mediaObjectShowClass();
-	mediaObject.portal = portal // Kind of important. ;)
+	let mediaObject = new mediaObjectShowClass();
+	//mediaObject.portal = portal // Kind of important. ;)
 	
-	mediaObject = parseInfoPageHTML(body, mediaObject)
+	parseInfoPageHTML(body, mediaObject)
 
 	res.json(mediaObject)
 }
 
 function parseInfoPageHTML(mediaInfoHTML, mediaObject) {
-	$ = cheerio.load(mediaInfoHTML);
+	let $ = cheerio.load(mediaInfoHTML);
 	
 	// Get title
-	var titleHTML = $("div.movie_navigation").find(".titles").find("a")
-	var title = titleHTML.text()
+	let title = $('div.movie_navigation').find('.titles').find('a').text()
 	
 	// Remove year from title. IE ( 2015 ), and clean it up
-	var regexYear = /(\(\ \d\d\d\d\ \))/g
+	let regexYear = /(\(\ \d\d\d\d\ \))/g
 	title = title.replace(regexYear, '')
 	mediaObject.title = title.trim()
 
+	// Retrieve poster art
 	mediaObject.images = new mediaObjectImages()
-	mediaObject.images.poster = "http:" + $("div.movie_thumb").find("img").attr("src")
+	mediaObject.images.poster = 'http:' + $('div.movie_thumb').find('img').attr('src')
 
 	// Parse genre
 	//parseInfoPageGenresHTML
@@ -148,24 +154,22 @@ function parseInfoPageHTML(mediaInfoHTML, mediaObject) {
 	// Parse release date (for year and maybe airdate?)
 
 	// Parse synopsis
-	var movieInfoHTML = $("div.movie_info").find("p")
-	var movieSynopsis = movieInfoHTML.text()
+	let movieInfoHTML = $('div.movie_info').find('p')
+	let movieSynopsis = movieInfoHTML.text()
 	mediaObject.synopsis = movieSynopsis.trim()
 
 	// Parse rating
 
 
 	// Season stuff
-	var episodeContainer = $("div.tv_container")
-	var seasonContainers = episodeContainer.find("div.show_season")
+	let episodeContainer = $('div.tv_container')
+	let seasonContainers = episodeContainer.find('div.show_season')
 	
-	var seasonCount = seasonContainers.length
+	let seasonCount = seasonContainers.length
 	if (seasonCount <= 0)  return mediaObject
 
 	// Get season information
 	mediaObject.seasons = seasonCount
-
-	return mediaObject
 }
 
 function parseEpisodeList(body, req, res) {
@@ -186,7 +190,7 @@ function mediaObjectShowClass() { // Works for Movie and Series
 
 	this.images = undefined // Single instance of mediaObjectImages()
 
-	this.info = undefined // String (URL to info page)
+	this.link = undefined // String (URL to info page)
 
 	this.genres = undefined // Array of mediaObjectGenre()
 	this.country = undefined // String
@@ -208,7 +212,7 @@ function mediaObjectEpisodeClass() {
 
 	this.images = undefined // Single instance of mediaObjectImages()
 
-	this.info = undefined // String (URL to info page)
+	this.link = undefined // String (URL to info page)
 
 	this.rating = undefined // Number
 

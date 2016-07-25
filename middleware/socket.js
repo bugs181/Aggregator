@@ -7,12 +7,24 @@ var routes = []
 var logColorRed = '#FF0000' // red
 var logColorBlue = '#0033CC' // blue
 
+// Session stuff
+//var Session      = require('express-session')
+var Session      = require('./persistent-session')
+var SessionStore = require('session-file-store')(Session)
+// todo: use rethinkDB to store sessions for load balancing
+// var sessionStore = require("database-connector")(session) // Uses rethinkDB connector
+
+var session = Session({ 
+  store: new SessionStore({ path: __dirname + '/../tmp/sessions' }), 
+  cookie: { maxAge: 6000000 }, // ~70 days
+  secret: 'dFhq028tY240htRy20Tu7090t4Q', 
+  resave: true, 
+  saveUninitialized: false,
+  rolling: true
+})
+
+
 module.exports = function(app) {
-	init(app)
-}
-
-
-function init(app) {
 	var server = require('http').Server(app)
 	var io = require('socket.io')(server)
 
@@ -76,8 +88,11 @@ function parseRequest(socket, req) {
 
 	logRequest(logColorBlue, req)
 
-	var req = initReq(route, method, url, body)
+	var req = initReq(route, method, url, body, socket)
 	var res = initRes(reqId, socket)
+
+	// Add session support to socket.io
+	session(req, res, function() {})
 
 	var fn = route.fn
 	fn.call(null, req, res)
@@ -120,23 +135,26 @@ function regexMatches(regex, string) {
 		return regex.exec(string)
 }
 
-function initReq(route, method, url, body) {
+function initReq(route, method, url, body, socket) {
 	var query = require('querystring').parse(url)
 	var params = getParams(route, decodeURI(url))
 
 	return {
 		query: query,
 		params: params,
-		body: body
+		body: body,
+		isSocket: true
 	}
 }
 
 function initRes(reqId, socket) {
 	return {
 		statusCode: 200,
+		headers: [],
 
 		status: function(code) {
 			console.log(`Set status code to ${code}`)
+			return this
 		},
 
 		send: function(data) {
@@ -147,7 +165,20 @@ function initRes(reqId, socket) {
 		end: function(data) {
 			//console.log(data)
 			socket.emit('req', { id: reqId, statusCode: this.statusCode }, data)
+		},
+
+		write: function(data) {
+			socket.emit('req', { id: reqId, statusCode: this.statusCode }, data)
+		},
+
+		header: function(header) {
+			var headerNamer = header[0]
+			var headerProp = header[1]
+
+			this.headers.push({ name: headerName, property: headerProp })
 		}
+
+		// setHeader?
 	}
 }
 

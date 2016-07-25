@@ -1,8 +1,10 @@
+'use strict'
 
 // Requirements
-var ansi = require('ansi'), cursor = ansi(process.stdout)
-var bodyParser   = require('body-parser')
-var responseTime = require('response-time')
+let ansi = require('ansi')
+let cursor = ansi(process.stdout)
+let bodyParser   = require('body-parser')
+let responseTime = require('response-time')
 
 
 module.exports = function(app) {

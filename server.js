@@ -7,7 +7,7 @@ let ansi = require('ansi')
 let cursor = ansi(process.stdout)
 
 // Config file
-const config = require("./config/development/server")
+const config = require('./config/development/server')
 
 // Express server
 let express = require('express')
@@ -24,7 +24,7 @@ require('./middleware/socket')(app, config)
 // Start app
 const port = config.http.port
 let server = app.listen(port, function() {
-	cursor.hex('#2EAEBB').write("Waiting for web requests on ")
-				.hex('#D35003').write('' + port + '\r\n')
+	cursor.hex('#2EAEBB').write('Waiting for web requests on ')
+				.hex('#D35003').write(`${port}\r\n`)
 				.reset()
 })

@@ -3,16 +3,14 @@
 let website = 'http://changelog.com/'
 
 module.exports = {
-  name: 'changelog',
+  name: 'changelog.com',
   type: 'RSS',
   website: website,
-
-  channelType: 'aggregator',
 
   discoverChannelSections: discoverChannelSections,
   discoverMediaObjects: discoverMediaObjects,
   searchMediaObjects: searchMediaObjects,
-  getMediaObjectInfo: getMediaObjectInfo
+  getMediaObjectInfo: getMediaObjectInfo,
 }
 
 

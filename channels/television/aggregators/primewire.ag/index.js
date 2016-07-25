@@ -1,86 +1,77 @@
-var website = 'http://www.primewire.ag/';
+'use strict'
 
-// Helper modules
-var http = require("./helpers/http")
-var mediaParser = require("./mediaParser")
-
+let website = 'http://www.primewire.ag/'
 
 module.exports = {
-	name: "PrimeWire",
-	type: "television",
+	name: 'PrimeWire.ag',
+	type: 'television',
 	website: website,
 
-	channelType: "aggregator",
+	aggregator: true,
 	
-	browse: browseRequest,
-	search: search,
-	mediaInfo: mediaInfo
+  discoverChannelSections: discoverChannelSections,
+  discoverMediaObjects: discoverMediaObjects,
+  getMediaObjectInfo: getMediaObjectInfo,
+  searchMediaObjects: searchMediaObjects,
 }
 
 
-function browseRequest(req, res) {
-	var mediaType = req.params.mediaType
+// Helper modules
+let http = require('./helpers/http')
+let mediaParser = require('./mediaParser')
 
-	if (mediaType == "movies") {
-		browseMovies(req, res)
-	} else if (mediaType == "shows") {
-		browseShows(req, res)
-	} else if (mediaType == "music") {
-		browseMusic(req, res)
-	} else {
-		res.status(404).json({ success: false, error: "No such media type." })
+
+function discoverChannelSections(params, callback) {
+
+}
+
+function discoverMediaObjects(params, callback) {
+	let mediaObjectType = params.mediaObjectType || 'default'
+	let query = params.query
+	let pagination = query.page || 1 // Default to page 1.
+
+	let mediaURL
+
+	switch (mediaObjectType.toLowerCase()) {
+	case 'movies':
+		mediaURL = `${website}?page=${pagination}`
+		break
+
+	case 'shows':
+		mediaURL = `${website}?tv=&page=${pagination}`
+		break
+
+	case 'music':
+		mediaURL = `${website}?music=&page=${pagination}`
+		break
+
+	default:
+		mediaURL = `${website}?page=${pagination}`
+		break
 	}
-}
 
-function browseMovies(req, res) {
-	var pagination = req.params.page
-	if (!pagination)  pagination = 1 // Default to page 1.
-
-	res.send("browsing primewire.ag")
-}
-
-function browseShows(req, res) {
-	//var pagination = req.query.page
-	//if (!pagination)  pagination = 1 // Default to page 1.
-
-	var pagination = req.query.page || 1
-	var mediaURL = website + "?tv=&page=" + pagination
-	
-	console.log("Load page: " + mediaURL)
+	console.log(`Load ${mediaObjectType} page: ${mediaURL}`)
 	http.loadPage(mediaURL, function(body) {
-		mediaParser.parseIndex(body, req, res)
+		mediaParser.parseIndex(body, params, callback)
 	})
 }
 
-function browseMusic(req, res) {
-	res.send("browsing primewire.ag music")
-	// http://www.primewire.ag/?music
-	// http://www.primewire.ag/song-2721849-Cardiff-online-free
-}
-
-
-function mediaInfo(req, res) {
-	// Example use: http://localhost:8020/primewire.ag/info/watch-2738400-Danis-Castle-online-free
-	
-	var sourceURL = req.params.sourceURL
-	var mediaURL = website + sourceURL
-	console.log("Load page: " + mediaURL)
-
+function getMediaObjectInfo(params, callback) {
+	/*
 	http.loadPage(mediaURL, function(body) {
 		mediaParser.parseInfoPage(body, req, res)
-	})	
+	})*/
 }
 
-function search(req, res) {
-	var searchTerm = req.query.term
+function searchMediaObjects(params, callback) {
+	let query = params.query
+	let searchTerm = query.term
 
-	if (!searchTerm) {
-		res.status(404).send({ err: true, reason: "No search term provided." })
-		return
-	}
+	if (!searchTerm)
+		return callback("No search term provided")
 
 	var mediaURL = website + "index.php?search_keywords=" + searchTerm
 	http.loadPage(mediaURL, function(body) {
-		mediaParser.parseIndex(body, req, res)
-	})	
+		mediaParser.parseIndex(body, params, callback)
+	})
 }
